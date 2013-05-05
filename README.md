@@ -15,11 +15,11 @@ An implementation of the [Specification Pattern](http://en.wikipedia.org/wiki/Sp
 Simply derive from `Specification<TEntity>` and override `Predicate`.
 
 ```csharp
-internal class GreaterThanSpec : Specification<int>
+class GreaterThanSpecification : Specification<int>
 {
     private readonly int _value;
 
-    public GreaterThanSpec(int value)
+    public GreaterThanSpecification(int value)
     {
         _value = value;
     }
@@ -37,7 +37,7 @@ Call `SatisifiedBy` on your specification to use it.
 
 ```csharp
 var entities = GetEntities();
-var satisfiedEntities = compositeSpec.SatisfiedBy(entities);
+var satisfiedEntities = compositeSpecification.SatisfiedBy(entities);
 
 foreach (var entity in satisfiedEntities)
     Console.WriteLine("Found one! {0}", entity);
@@ -48,9 +48,9 @@ foreach (var entity in satisfiedEntities)
 `Specification<TEntity>` contains `AndAlso` and `OrElse` methods for combining specifications.
 
 ```csharp
-var greaterThanSpec = new GreaterThanSpec(2);
-var lessThanSpec = new LessThanSpec(-2);
-var compositeSpec = greaterThanSpec.OrElse(lessThanSpec);
+var greaterThanSpecification = new GreaterThanSpecification(-2);
+var lessThanSpecification = new LessThanSpecification(2);
+var compositeSpecification = greaterThanSpecification.AndAlso(lessThanSpecification);
 ```
 
 The `True` and `False` methods create an instance of `Specification<TEntity>` that can serve as useful starting points for combining specifications.

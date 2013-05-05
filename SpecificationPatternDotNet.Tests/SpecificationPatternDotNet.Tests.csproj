@@ -50,8 +50,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="GreaterThanSpec.cs" />
-    <Compile Include="LessThanSpec.cs" />
+    <Compile Include="GreaterThanSpecification.cs" />
+    <Compile Include="LessThanSpecification.cs" />
     <Compile Include="SpecificationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

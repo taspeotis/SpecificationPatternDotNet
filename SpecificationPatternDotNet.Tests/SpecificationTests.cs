@@ -9,12 +9,12 @@ namespace SpecificationPatternDotNet.Tests
         [TestMethod]
         public void AndAlsoSatisfiesBoth()
         {
-            var greaterThanSpec = new GreaterThanSpec(-2);
-            var lessThanSpec = new LessThanSpec(2);
-            var compositeSpec = greaterThanSpec.AndAlso(lessThanSpec);
+            var greaterThanSpecification = new GreaterThanSpecification(-2);
+            var lessThanSpecification = new LessThanSpecification(2);
+            var compositeSpecification = greaterThanSpecification.AndAlso(lessThanSpecification);
 
             var entities = GetEntities();
-            var satisfiedEntities = compositeSpec.SatisfiedBy(entities);
+            var satisfiedEntities = compositeSpecification.SatisfiedBy(entities);
 
             Assert.IsTrue(satisfiedEntities.All(i => i > -2 && i < 2));
         }
@@ -22,12 +22,12 @@ namespace SpecificationPatternDotNet.Tests
         [TestMethod]
         public void OrElseSatisfiesEither()
         {
-            var greaterThanSpec = new GreaterThanSpec(2);
-            var lessThanSpec = new LessThanSpec(-2);
-            var compositeSpec = greaterThanSpec.OrElse(lessThanSpec);
+            var greaterThanSpecification = new GreaterThanSpecification(2);
+            var lessThanSpecification = new LessThanSpecification(-2);
+            var compositeSpecification = greaterThanSpecification.OrElse(lessThanSpecification);
 
             var entities = GetEntities();
-            var satisfiedEntities = compositeSpec.SatisfiedBy(entities);
+            var satisfiedEntities = compositeSpecification.SatisfiedBy(entities);
 
             Assert.IsTrue(satisfiedEntities.All(i => i > 2 || i < -2));
         }
@@ -35,13 +35,13 @@ namespace SpecificationPatternDotNet.Tests
         [TestMethod]
         public void NotSatisfiesInverse()
         {
-            var greaterThanSpec = new GreaterThanSpec(2);
-            var lessThanSpec = new LessThanSpec(-2);
-            var compositeSpec = greaterThanSpec.OrElse(lessThanSpec);
-            var inverseSpec = compositeSpec.Not();
+            var greaterThanSpecification = new GreaterThanSpecification(2);
+            var lessThanSpecification = new LessThanSpecification(-2);
+            var compositeSpecification = greaterThanSpecification.OrElse(lessThanSpecification);
+            var inverseSpecification = compositeSpecification.Not();
 
             var entities = GetEntities();
-            var satisfiedEntities = inverseSpec.SatisfiedBy(entities);
+            var satisfiedEntities = inverseSpecification.SatisfiedBy(entities);
 
             Assert.IsTrue(satisfiedEntities.All(i => !(i > 2 || i < -2)));
         }
@@ -49,10 +49,10 @@ namespace SpecificationPatternDotNet.Tests
         [TestMethod]
         public void FalseSatisfiesNone()
         {
-            var falseSpec = Specification<int>.False();
+            var falseSpecification = Specification<int>.False();
 
             var entities = GetEntities();
-            var satisfiedEntities = falseSpec.SatisfiedBy(entities);
+            var satisfiedEntities = falseSpecification.SatisfiedBy(entities);
 
             Assert.IsTrue(!satisfiedEntities.Any());
         }
@@ -60,10 +60,10 @@ namespace SpecificationPatternDotNet.Tests
         [TestMethod]
         public void TrueSatisfiesAll()
         {
-            var trueSpec = Specification<int>.True();
+            var trueSpecification = Specification<int>.True();
 
             var entities = GetEntities();
-            var satisfiedEntities = trueSpec.SatisfiedBy(entities);
+            var satisfiedEntities = trueSpecification.SatisfiedBy(entities);
 
             CollectionAssert.AreEquivalent(entities.ToList(), satisfiedEntities.ToList());
         }
