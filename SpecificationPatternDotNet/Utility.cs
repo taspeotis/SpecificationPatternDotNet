@@ -42,7 +42,7 @@ namespace SpecificationPatternDotNet
 
         public static Expression<Func<TEntity, bool>> Not<TEntity>(this Expression<Func<TEntity, bool>> expression)
         {
-            var unaryExpression = Expression.Not(expression);
+            var unaryExpression = Expression.Not(expression.Body);
 
             return Expression.Lambda<Func<TEntity, bool>>(unaryExpression, expression.Parameters);
         }

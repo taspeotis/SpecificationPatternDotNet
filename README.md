@@ -12,7 +12,58 @@ An implementation of the [Specification Pattern](http://en.wikipedia.org/wiki/Sp
 
 ### Creating Specifications
 
+Simply derive from `Specification<TEntity>` and override `Predicate`.
+
+```csharp
+internal class GreaterThanSpec : Specification<int>
+{
+    private readonly int _value;
+
+    public GreaterThanSpec(int value)
+    {
+        _value = value;
+    }
+
+    protected override Expression<Func<int, bool>> Predicate
+    {
+        get { return i => i > _value; }
+    }
+}
+```
+
+### Using Specifications
+
+Call `SatisifiedBy` on your specification to use it.
+
+```csharp
+var entities = GetEntities();
+var satisfiedEntities = compositeSpec.SatisfiedBy(entities);
+
+foreach (var entity in satisfiedEntities)
+    Console.WriteLine("Found one! {0}", entity);
+```
+
 ### Combining Specifications
+
+`Specification<TEntity>` contains `AndAlso` and `OrElse` methods for combining specifications.
+
+```csharp
+var greaterThanSpec = new GreaterThanSpec(2);
+var lessThanSpec = new LessThanSpec(-2);
+var compositeSpec = greaterThanSpec.OrElse(lessThanSpec);
+```
+
+The `True` and `False` methods create an instance of `Specification<TEntity>` that can serve as useful starting points for combining specifications.
+
+```csharp
+var specifications = GetSpecifications();
+var allSpecifications = Specification<int>.True();
+
+foreach (var specification in specifications)
+    allSpecifications = allSpecifications.AndAlso(specification);
+````
+
+The `Not` method can be used to take the inverse of a specification.
 
 ## Miscellany
 
