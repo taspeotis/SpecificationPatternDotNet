@@ -16,12 +16,22 @@ namespace SpecificationPatternDotNet
             return entities.Where(Predicate);
         }
 
-        public Specification<TEntity> AndAlso(Specification<TEntity> otherSpecification)
+        public Specification<TDerivedEntity> AndAlso<TDerivedEntity>(Specification<TDerivedEntity> otherSpecification)
+            where TDerivedEntity : TEntity
         {
             if (otherSpecification == null) throw new ArgumentNullException("otherSpecification");
             if (Predicate == null) throw new InvalidOperationException();
 
-            return new ReadOnlySpecification<TEntity>(Predicate.AndAlso(otherSpecification.Predicate));
+            return new ReadOnlySpecification<TDerivedEntity>(Predicate.AndAlso(otherSpecification.Predicate));
+        }
+
+        public Specification<TDerivedEntity> OrElse<TDerivedEntity>(Specification<TDerivedEntity> otherSpecification)
+            where TDerivedEntity : TEntity
+        {
+            if (otherSpecification == null) throw new ArgumentNullException("otherSpecification");
+            if (Predicate == null) throw new InvalidOperationException();
+
+            return new ReadOnlySpecification<TDerivedEntity>(Predicate.OrElse(otherSpecification.Predicate));
         }
 
         public Specification<TEntity> Not()
@@ -29,14 +39,6 @@ namespace SpecificationPatternDotNet
             if (Predicate == null) throw new InvalidOperationException();
 
             return new ReadOnlySpecification<TEntity>(Predicate.Not());
-        }
-
-        public Specification<TEntity> OrElse(Specification<TEntity> otherSpecification)
-        {
-            if (otherSpecification == null) throw new ArgumentNullException("otherSpecification");
-            if (Predicate == null) throw new InvalidOperationException();
-
-            return new ReadOnlySpecification<TEntity>(Predicate.OrElse(otherSpecification.Predicate));
         }
 
         public static Specification<TEntity> False()

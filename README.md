@@ -67,9 +67,7 @@ The `Not` method can be used to take the inverse of a specification.
 
 ## Miscellany
 
-*SpecificationPatternDotNet* targets the .NET Framework 4.5, which is only available on Windows Vista and later.
-
-Nothing prevents you from reducing the library target to a version of the .NET Framework that runs on operating systems earlier than Windows Vista.
+*SpecificationPatternDotNet* targets the .NET Framework 4.0.
 
 The library is not tied to any particular architecture, the code should execute on x86, x64 and ia64.
 

@@ -2,16 +2,12 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>SpecificationPatternDotNet</id>
-        <version>1.0.0</version>
         <title>SpecificationPatternDotNet</title>
         <authors>ta.speot.is</authors>
         <owners>ta.speot.is</owners>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>An implementation of the Specification Pattern using idiomatic C#.</description>
         <summary />
-        <copyright>Copyright Todd Aspeotis 2013</copyright>
+        <copyright>Copyright Todd Aspeotis 2015</copyright>
     </metadata>
-    <files>
-        <file src="SpecificationPatternDotNet\bin\Release\SpecificationPatternDotNet.dll" target="lib\net45" />
-    </files>
 </package>
