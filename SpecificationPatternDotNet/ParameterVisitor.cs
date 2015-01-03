@@ -4,16 +4,21 @@ namespace SpecificationPatternDotNet
 {
     internal sealed class ParameterVisitor : ExpressionVisitor
     {
-        private readonly ParameterExpression _parameterExpression;
+        private readonly ParameterExpression _sourceParameter;
+        private readonly ParameterExpression _destinationParameter;
 
-        public ParameterVisitor(ParameterExpression parameterExpression)
+        public ParameterVisitor(ParameterExpression sourceParameter, ParameterExpression destinationParameter)
         {
-            _parameterExpression = parameterExpression;
+            _sourceParameter = sourceParameter;
+            _destinationParameter = destinationParameter;
         }
 
-        protected override Expression VisitParameter(ParameterExpression parameterExpression)
+        protected override Expression VisitParameter(ParameterExpression parameter)
         {
-            return _parameterExpression;
+            if (ReferenceEquals(parameter, _sourceParameter))
+                return _destinationParameter;
+
+            return base.VisitParameter(parameter);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace SpecificationPatternDotNet
@@ -27,13 +28,18 @@ namespace SpecificationPatternDotNet
             Func<Expression, Expression, Expression> mergeFunc)
             where TDerivedEntity : TEntity
         {
-            var derivedParameterExpression = Expression.Parameter(typeof (TDerivedEntity));
-            var parameterVisitor = new ParameterVisitor(derivedParameterExpression);
-            var firstBody = parameterVisitor.Visit(firstExpression.Body);
-            var secondBody = parameterVisitor.Visit(secondExpression.Body);
+            var derivedParameter = Expression.Parameter(typeof (TDerivedEntity));
+
+            var firstParameter = firstExpression.Parameters.Single();
+            var firstParameterVisitor = new ParameterVisitor(firstParameter, derivedParameter);
+            var firstBody = firstParameterVisitor.Visit(firstExpression.Body);
+
+            var secondParameter = secondExpression.Parameters.Single();
+            var secondParameterVisitor = new ParameterVisitor(secondParameter, derivedParameter);
+            var secondBody = secondParameterVisitor.Visit(secondExpression.Body);
 
             return Expression.Lambda<Func<TDerivedEntity, bool>>(
-                mergeFunc(firstBody, secondBody), derivedParameterExpression);
+                mergeFunc(firstBody, secondBody), derivedParameter);
         }
 
         public static Expression<Func<TEntity, bool>> Not<TEntity>(this Expression<Func<TEntity, bool>> expression)
