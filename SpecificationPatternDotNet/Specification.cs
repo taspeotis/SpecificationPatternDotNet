@@ -4,41 +4,65 @@ using System.Linq.Expressions;
 
 namespace SpecificationPatternDotNet
 {
-    public abstract class Specification<TEntity> : ISpecification<TEntity>
+    public abstract class Specification<TEntity> : IExpressionSpecification
     {
         protected abstract Expression<Func<TEntity, bool>> Predicate { get; }
 
-        public IQueryable<TEntity> SatisfiedBy(IQueryable<TEntity> entities)
-        {
-            if (entities == null) throw new ArgumentNullException("entities");
-            if (Predicate == null) throw new InvalidOperationException();
+        Expression IExpressionSpecification.Predicate => Predicate;
 
-            return entities.Where(Predicate);
+        public IQueryable<TDerivedEntity> SatisfiedBy<TDerivedEntity>(IQueryable<TDerivedEntity> entities)
+            where TDerivedEntity : TEntity
+        {
+            if (entities == null) throw new ArgumentNullException(nameof(entities));
+
+            var entityPredicate = Predicate;
+
+            if (entityPredicate == null) throw new InvalidOperationException("Predicate");
+
+            if (typeof (TDerivedEntity) == typeof (TEntity))
+                return (IQueryable<TDerivedEntity>) ((IQueryable<TEntity>) entities).Where(entityPredicate);
+
+            var entityParameter = entityPredicate.Parameters.Single();
+            var derivedEntityParameter = Expression.Parameter(typeof (TDerivedEntity), entityParameter.Name);
+
+            var parameterVisitor = new ParameterVisitor(entityParameter, derivedEntityParameter);
+            var derivedEntityBody = parameterVisitor.Visit(entityPredicate.Body);
+            var derivedEntityExpression = Expression.Lambda(derivedEntityBody, derivedEntityParameter);
+
+            return entities.Where((Expression<Func<TDerivedEntity, bool>>) derivedEntityExpression);
         }
 
         public Specification<TDerivedEntity> AndAlso<TDerivedEntity>(Specification<TDerivedEntity> otherSpecification)
             where TDerivedEntity : TEntity
         {
-            if (otherSpecification == null) throw new ArgumentNullException("otherSpecification");
-            if (Predicate == null) throw new InvalidOperationException();
+            if (otherSpecification == null) throw new ArgumentNullException(nameof(otherSpecification));
 
-            return new ReadOnlySpecification<TDerivedEntity>(Predicate.AndAlso(otherSpecification.Predicate));
+            var entityPredicate = Predicate;
+
+            if (entityPredicate == null) throw new InvalidOperationException();
+
+            return new ReadOnlySpecification<TDerivedEntity>(entityPredicate.AndAlso(otherSpecification.Predicate));
         }
 
         public Specification<TDerivedEntity> OrElse<TDerivedEntity>(Specification<TDerivedEntity> otherSpecification)
             where TDerivedEntity : TEntity
         {
-            if (otherSpecification == null) throw new ArgumentNullException("otherSpecification");
-            if (Predicate == null) throw new InvalidOperationException();
+            if (otherSpecification == null) throw new ArgumentNullException(nameof(otherSpecification));
 
-            return new ReadOnlySpecification<TDerivedEntity>(Predicate.OrElse(otherSpecification.Predicate));
+            var entityPredicate = Predicate;
+
+            if (entityPredicate == null) throw new InvalidOperationException();
+
+            return new ReadOnlySpecification<TDerivedEntity>(entityPredicate.OrElse(otherSpecification.Predicate));
         }
 
         public Specification<TEntity> Not()
         {
-            if (Predicate == null) throw new InvalidOperationException();
+            var entityPredicate = Predicate;
 
-            return new ReadOnlySpecification<TEntity>(Predicate.Not());
+            if (entityPredicate == null) throw new InvalidOperationException();
+
+            return new ReadOnlySpecification<TEntity>(entityPredicate.Not());
         }
 
         public static Specification<TEntity> False()

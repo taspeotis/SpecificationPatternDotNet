@@ -4,7 +4,7 @@ An implementation of the [Specification Pattern](http://en.wikipedia.org/wiki/Sp
 
 ## License
 
-*SpecificationPatternDotNet* uses [code from MSDN](http://blogs.msdn.com/b/meek/archive/2008/05/02/linq-to-entities-combining-predicates.aspx) that is licensed under the [*Microsoft Limited Public License (MS-LPL)*](http://msdn.microsoft.com/en-us/cc300389.aspx#P). Consequently, *SpecificationPatternDotNet* has the same license.
+*SpecificationPatternDotNet* is licensed under the [*Microsoft Public License (MS-PL)*](http://www.microsoft.com/en-us/openness/licenses.aspx).
 
 ## Getting Started
 
@@ -67,7 +67,7 @@ The `Not` method can be used to take the inverse of a specification.
 
 ## Miscellany
 
-*SpecificationPatternDotNet* targets the .NET Framework 4.0.
+*SpecificationPatternDotNet* targets PCL Profile7.
 
 The library is not tied to any particular architecture, the code should execute on x86, x64 and ia64.
 

@@ -2,8 +2,9 @@
 
 namespace SpecificationPatternDotNet
 {
-    public interface ISpecification<TEntity>
+    public interface ISpecification<in TEntity>
     {
-        IQueryable<TEntity> SatisfiedBy(IQueryable<TEntity> entities);
+        IQueryable<TDerivedEntity> SatisfiedBy<TDerivedEntity>(IQueryable<TDerivedEntity> entities)
+            where TDerivedEntity : TEntity;
     }
 }
