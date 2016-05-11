@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -30,6 +31,12 @@ namespace SpecificationPatternDotNet
             var derivedEntityExpression = Expression.Lambda(derivedEntityBody, derivedEntityParameter);
 
             return entities.Where((Expression<Func<TDerivedEntity, bool>>) derivedEntityExpression);
+        }
+
+        public IEnumerable<TDerivedEntity> SatisfiedBy<TDerivedEntity>(IEnumerable<TDerivedEntity> entities)
+            where TDerivedEntity : TEntity
+        {
+            return SatisfiedBy(entities.AsQueryable());
         }
 
         public Specification<TDerivedEntity> AndAlso<TDerivedEntity>(Specification<TDerivedEntity> otherSpecification)
