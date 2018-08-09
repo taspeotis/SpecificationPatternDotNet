@@ -67,7 +67,7 @@ The `Not` method can be used to take the inverse of a specification.
 
 ## Miscellany
 
-*SpecificationPatternDotNet* targets PCL Profile7.
+*SpecificationPatternDotNet* targets .NET Standard 2.0.
 
 The library is not tied to any particular architecture, the code should execute on x86, x64 and ia64.
 
